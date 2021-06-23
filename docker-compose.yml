@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  nogicomma:
+    # コンテナ指定
+    build:
+      context: .
+    image: nogicomma
+    restart: always
+    tty: true
+    # ローカルプロジェクトと同期
+    volumes:
+      - .:/usr/local/src/nogicomma

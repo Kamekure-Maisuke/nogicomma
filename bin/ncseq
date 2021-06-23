@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+export LC_ALL=C
+
+[ "$1" = "-v" ] && {
+  echo "${0##*/} version 1.0.0"
+  exit 0
+}
+
+[ "$1" = "-h" ] && {
+  cat <<EOF
+Usage: ${0##*/} [option]
+Script description here.
+Available options:
+-h      show help
+-v      show version
+[number] 
+EOF
+  exit
+}
+
+[[ $# -eq 0  || $1 =~ [^0-9] || $1 =~ ^-.+$ ]] && {
+  cat <<EOF >&2
+${0##*/}: missing option
+Try '${0##*/} -h' for more information.
+EOF
+  exit 1
+}
+
+for i in `seq $1`; do
+  printf '\e[35m⊿\e[0m\n'
+done
