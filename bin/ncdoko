@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+export LC_ALL=C
+
+CACHE="$(dirname $0)/../data/"
+
+error_and_usage(){
+	echo "usage : ${0##*/}"
+	exit 1
+}
+
+# 引数以上はエラー
+[ $# -eq 0 ] || error_and_usage
+
+# cacheデータがあれば優先
+[ -e "$CACHE" ] && {
+	cat "$CACHE/nogidoko_list.tsv"
+} || {
+	echo "データがありません。"
+	exit 1
+}
