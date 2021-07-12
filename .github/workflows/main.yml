@@ -7,8 +7,8 @@ on:
 jobs:
   build:
     name: build
-	runs-on: ubuntu-latest
-	steps:
-	  - uses: actions/checkout@v2
-	  - name: Update Data
-	  - run: sh ./script/make_current_member.sh
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update Data
+      - run: sh ./script/make_current_member.sh
