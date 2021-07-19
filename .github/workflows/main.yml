@@ -1,0 +1,20 @@
+name: "dataUpdate"
+
+on:
+  schedule:
+    - cron: '40 8 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update Data
+      run: sh ./script/make_current_member.sh
+    - name: setting git
+      run: |
+        git config --local user.email ${{ secrets.EMAIL }}
+        git config --local user.name "KamekuraMaisuke"
+        git add .
+        git commit -m "update current_data $(date '+%Y%m%d')"
+        git push origin master
