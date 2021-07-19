@@ -15,7 +15,7 @@ jobs:
     - name: setting git
       run: |
         git config --local user.email ${{ secrets.EMAIL }}
-        git config --local user.name "KamekuraMaisuke"
+        git config --local user.name "KamekureMaisuke"
         git add .
         git commit -m "update current_data $(date '+%Y%m%d')"
         git push origin master
