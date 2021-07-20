@@ -43,7 +43,7 @@ encode=$(printf "$SEARCH" | od -tx1 -An | xargs)
 result=$(echo $encode | awk '{sub(".","%&",$0); gsub(" ","%",$0); print toupper($0)}')
 page_data=$(curl -s "$URL/$result")
 
-search_command="grep -A 1 -E '<td style=.+>[0-9]+月[0-9]+日' | sed -r -e 's/<[^>]+>//g' -e 's/&#.+//g' -e '/--/d' | awk '{if(NR%2)ORS=\"\t\"; else ORS=\"\n\"; print}'"
+search_command="grep -A 1 -E '<td style=.+>[0-9]+月[0-9]+日' | sed -r -e 's/<[^>]+>//g' -e 's/&#.+//g' -e '/--/d' | tr -d '\"' | awk '{if(NR%2)ORS=\"\t\"; else ORS=\"\n\"; print}'"
 
 list_2015=$(echo "$page_data" |
 sed -n '/<span class="mw-headline" id="2015年">/,/<span class="mw-headline" id="2016年">/p' |
