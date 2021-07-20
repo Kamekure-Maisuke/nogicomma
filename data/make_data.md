@@ -37,11 +37,49 @@ awk -F '\t' '{print $1"\t"$2"\t"substr($3,1,10)"\t"$4}'
 ## koujichuListデータの作成
 
 ```bash
-curl -s 'https://ja.wikipedia.org/wiki/%E4%B9%83%E6%9C%A8%E5%9D%82%E5%B7%A5%E4%BA%8B%E4%B8%AD%E3%81%AE%E6%94%BE%E9%80%81%E6%97%A5%E7%A8%8B%E4%B8%80%E8%A6%A7' |
-sed -n '/<span class="mw-headline" id="2015年">/,/<span class="mw-headline" id="脚注">/p' |
-grep -A 1 -E '<td style=.+>[0-9]+月[0-9]+日' |
-sed -r -e 's/<[^>]+>//g' -e 's/&.+//g' -e '/--/d' |
-awk '{if(NR%2)ORS=" "; else ORS="\n"; print}'
+URL="https://ja.wikipedia.org/wiki"
+SEARCH="乃木坂工事中の放送日程一覧"
+encode=$(printf "$SEARCH" | od -tx1 -An | xargs)
+result=$(echo $encode | awk '{sub(".","%&",$0); gsub(" ","%",$0); print toupper($0)}')
+page_data=$(curl -s "$URL/$result")
+
+search_command="grep -A 1 -E '<td style=.+>[0-9]+月[0-9]+日' | sed -r -e 's/<[^>]+>//g' -e 's/&#.+//g' -e '/--/d' | awk '{if(NR%2)ORS=\"\t\"; else ORS=\"\n\"; print}'"
+
+list_2015=$(echo "$page_data" |
+sed -n '/<span class="mw-headline" id="2015年">/,/<span class="mw-headline" id="2016年">/p' |
+eval ${search_command})
+
+list_2016=$(echo "$page_data" |
+sed -n '/<span class="mw-headline" id="2016年">/,/<span class="mw-headline" id="2017年">/p' |
+eval ${search_command})
+
+list_2017=$(echo "$page_data" |
+sed -n '/<span class="mw-headline" id="2017年">/,/<span class="mw-headline" id="2018年">/p' |
+eval ${search_command})
+
+list_2018=$(echo "$page_data" |
+sed -n '/<span class="mw-headline" id="2018年">/,/<span class="mw-headline" id="2019年">/p' |
+eval ${search_command})
+
+list_2019=$(echo "$page_data" |
+sed -n '/<span class="mw-headline" id="2019年">/,/<span class="mw-headline" id="2020年">/p' |
+eval ${search_command})
+
+list_2020=$(echo "$page_data" |
+sed -n '/<span class="mw-headline" id="2020年">/,/<span class="mw-headline" id="2021年">/p' |
+eval ${search_command})
+
+list_2021=$(echo "$page_data" |
+sed -n '/<span class="mw-headline" id="2021年">/,/<span class="mw-headline" id="脚注">/p' |
+eval ${search_command})
+
+echo "$list_2015" | sed 's/^/2015年/'
+echo "$list_2016" | sed 's/^/2016年/'
+echo "$list_2017" | sed 's/^/2017年/'
+echo "$list_2018" | sed 's/^/2018年/'
+echo "$list_2019" | sed 's/^/2019年/'
+echo "$list_2020" | sed 's/^/2020年/'
+echo "$list_2021" | sed 's/^/2021年/'
 ```
 
 ## singleデータの作成
