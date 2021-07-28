@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+export LC_ALL=C
+
+CACHE="$(dirname $0)/../data/"
+
+error_and_usage(){
+	echo "usage : ${0##*/}"
+	exit 1
+}
+
+# 引数以上はエラー
+[ $# -eq 0 ] || error_and_usage
+
+# cacheデータがあれば優先
+[ -e "$CACHE" ] && {
+	cat "$CACHE/kojichu.tsv"
+} || {
+	# cacheデータの作り方はこちら。ソースを用意しておく。
+	# cat index.php  | grep -E '[0-9]{4}\.[0-9]{2}\.[0-9]{2}' | awk -F '[<>]' '{print $5"\t"$9}' | sort | awk -F '\t' '{print NR "\t" $1 "\t" $2}'
+	echo "データがありません。"
+	exit 1
+}
