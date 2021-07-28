@@ -4,23 +4,31 @@ set -e
 export LC_ALL=C
 
 NOGI_INFO_URL="https://ja.wikipedia.org/wiki/%E4%B9%83%E6%9C%A8%E5%9D%8246"
-CACHE="$(dirname $0)/../data/"
+DATA_DIR="$(dirname $0)/../data/"
+
+[ -e "$DATA_DIR/member_info.tsv" ] || {
+	curl -s $NOGI_INFO_URL |
+	grep -E -B 3 '<td>.+(都|県|府|州|道)</td>' |
+	sed -r -e 's/<[^>]+>//g' -e '/--/d' |
+	awk '{if(NR%4)ORS="\t";else ORS="\n"; print}' |
+	awk -F '\t' '{print $1"\t"$2"\t"substr($3,1,10)"\t"$4}' > "$DATA_DIR/member_info.tsv"
+}
 
 error_and_usage(){
 	echo "usage : ${0##*/}"
 	exit 1
 }
 
-# 引数1以上はエラー
-[ $# -eq 0 ] || error_and_usage
-
-# cacheデータがあれば優先
-[ -e "$CACHE" ] && {
-	cat "$CACHE/member_info.tsv"
-} || {
-	curl -s $NOGI_INFO_URL |
-	grep -E -B 3 '<td>.+(都|県|府|州|道)</td>' |
-	sed -r -e 's/<[^>]+>//g' -e '/--/d' |
-	awk '{if(NR%4)ORS="\t";else ORS="\n"; print}' |
-	awk -F '\t' '{print $1"\t"$2"\t"substr($3,1,10)"\t"$4}'
-}
+case ${1:-default} in
+	(-r)
+		line=$(wc -l "$DATA_DIR/member_info.tsv")
+		line=${line%% *}
+		awk -v line="$line" 'BEGIN{srand(); rn=int(rand()*line)+1} NR==rn' "$DATA_DIR/member_info.tsv"
+	;;
+	(default)
+		cat "$DATA_DIR/member_info.tsv"
+	;;
+	(*)
+		error_and_usage
+	;;
+esac
