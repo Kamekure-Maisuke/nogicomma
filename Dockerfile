@@ -4,7 +4,7 @@ MAINTAINER t_o_d
 ENV LANG ja_JP.UTF-8
 
 RUN apt update -yqq && \
-	apt install -y --no-install-recommends ca-certificates toilet locales curl && \
+	apt install -y --no-install-recommends ca-certificates toilet locales curl vim && \
 	locale-gen ja_JP.UTF-8 && \
 	rm -rf /var/lib/apt/lists/*
 
