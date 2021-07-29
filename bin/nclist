@@ -23,7 +23,8 @@ case ${1:-default} in
 	(-r)
 		line=$(wc -l "$DATA_DIR/member_info.tsv")
 		line=${line%% *}
-		awk -v line="$line" 'BEGIN{srand(); rn=int(rand()*line)+1} NR==rn' "$DATA_DIR/member_info.tsv"
+		rn=$(shuf -i 1-"$line" -n 1)
+		awk -v rn="$rn" 'NR==rn' "$DATA_DIR/member_info.tsv"
 	;;
 	(default)
 		cat "$DATA_DIR/member_info.tsv"
