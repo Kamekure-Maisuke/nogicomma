@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -e
+export LC_ALL=C
+export PURPLE=$'\e[35m'
+export NORMAL=$'\e[0m'
+
+error_and_usage(){
+	echo "usage : ${0##*/} [number]"
+	exit 1
+}
+
+row="${1:-46}"
+
+[ "$row" = "-h" ] && error_and_usage
+
+awk -v row=$row '
+BEGIN{
+	if(row>=100){
+		print "引数は100以下の数値を指定してください。"
+		exit(1)
+	}
+	for(i=1;i<=row;i++){
+		# space
+		for(j=i;j<row;j++){
+			printf(" ")
+		}
+		# symbol
+		for(j=1;j<=i;j++){
+			printf("%s⊿%s",ENVIRON["PURPLE"],ENVIRON["NORMAL"])
+		}
+		printf("\n")
+	}
+}
+'
