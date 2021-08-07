@@ -32,7 +32,7 @@ EOF
 message="${1:-のぎざか}"
 
 # 坂記号
-mark=$(printf '\e[35m⊿⊿\e[0m')
+mark=$(printf '\e[35m◢◢\e[0m')
 
 toilet -f bigmono9 "$message" |
 sed -e 's/░\|▒/ /g' -e "s/[^ ]/$mark/g" -e 's/ /  /g'

@@ -27,7 +27,7 @@ BEGIN{
 		}
 		# symbol
 		for(j=1;j<=i;j++){
-			printf("%s⊿%s",ENVIRON["PURPLE"],ENVIRON["NORMAL"])
+			printf("%s◢%s",ENVIRON["PURPLE"],ENVIRON["NORMAL"])
 		}
 		printf("\n")
 	}
