@@ -68,5 +68,5 @@ done
 ## singleデータの作成
 
 ```bash
-cat data | sed -n '/<span class="mw-headline" id="シングル">/,/<span class="mw-headline" id="アルバム">/p' | grep -E -e '<td .+>[0-9]{4}年[0-9]+月[0-9]+日' -e '<b>.+</b>' | sed -r 's/<[^>]+>//g' | awk '{if(NR%2)ORS="\t"; else ORS="\n"; print}' > single.tsv
+curl -s '乃木坂wikiURL' | sed -n '/<span class="mw-headline" id="シングル">/,/<span class="mw-headline" id="アルバム">/p' | grep -E -B 2 -A 10 '<b>.+</b>' | sed -r -e 's/<[^>]+>//g' -e '/-/d' -e '/^$/d' | awk '{if(NR%5)ORS="\t"; else ORS="\n"; print}' | awk -F '\t' 'BEGIN{OFS="\t"}{sub("amp;","",$2);sub(/&#.+/,"",$4);sub(/&#.+/,"",$5);print $1,$2,$4,$5}' > single.tsv
 ```
