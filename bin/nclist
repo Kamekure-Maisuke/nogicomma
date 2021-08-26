@@ -6,12 +6,12 @@ export LC_ALL=C
 NOGI_INFO_URL="https://ja.wikipedia.org/wiki/%E4%B9%83%E6%9C%A8%E5%9D%8246"
 DATA_DIR="$(dirname $0)/../data/"
 
-[ -e "$DATA_DIR/member_info.tsv" ] || {
+[ -e "$DATA_DIR/member_info_all.tsv" ] || {
 	curl -s $NOGI_INFO_URL |
 	grep -E -B 3 '<td>.+(都|県|府|州|道)</td>' |
 	sed -r -e 's/<[^>]+>//g' -e '/--/d' |
 	awk '{if(NR%4)ORS="\t";else ORS="\n"; print}' |
-	awk -F '\t' '{print $1"\t"$2"\t"substr($3,1,10)"\t"$4}' > "$DATA_DIR/member_info.tsv"
+	awk -F '\t' '{print $1"\t"$2"\t"substr($3,1,10)"\t"$4}' > "$DATA_DIR/member_info_all.tsv"
 }
 
 error_and_usage(){
@@ -21,13 +21,13 @@ error_and_usage(){
 
 case ${1:-default} in
 	(-r)
-		line=$(wc -l "$DATA_DIR/member_info.tsv")
+		line=$(wc -l "$DATA_DIR/member_info_all.tsv")
 		line=${line%% *}
 		rn=$(shuf -i 1-"$line" -n 1)
-		awk -v rn="$rn" 'NR==rn' "$DATA_DIR/member_info.tsv"
+		awk -v rn="$rn" 'NR==rn' "$DATA_DIR/member_info_all.tsv"
 	;;
 	(default)
-		cat "$DATA_DIR/member_info.tsv"
+		cat "$DATA_DIR/member_info_all.tsv"
 	;;
 	(*)
 		error_and_usage

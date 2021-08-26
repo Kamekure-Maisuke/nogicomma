@@ -43,6 +43,14 @@ awk '{if(NR%4) ORS="\t";else ORS="\n"; print}' |
 awk -F '\t' '{print $1"\t"$2"\t"substr($3,1,10)"\t"$4}'
 ```
 
+### member_info_nameデータの取得
+- member_info_allデータを加工して取得
+
+```bash
+cat member_info_all.tsv |
+awk -F '\t' 'BEGIN{OFS="\t"; print "名前","読み","ローマ字"}NR>1{t=$2; c="echo "t" | uconv -x latin";c | getline r;close(c);print $1,$2,r}' > member_info_name.tsv 
+```
+
 ## koujichuListデータの作成
 
 ```bash
