@@ -6,7 +6,7 @@
 
 ```bash
 curl -s 'https://ja.wikipedia.org/wiki/%E4%B9%83%E6%9C%A8%E5%9D%8246' |
-grep -E -B 3 '<td>.+(都|県|府|州|道)</td>' |
+grep -E -B 3 '<td>.+(都|県|府|州|道|ドルフ)</td>' |
 sed -r -e 's/<[^>]+>//g' -e '/--/d' |
 awk '{if(NR%4)ORS="\t";else ORS="\n"; print}' |
 awk -F '\t' '{print $1"\t"$2"\t"substr($3,1,10)"\t"$4}'
@@ -15,7 +15,7 @@ awk -F '\t' '{print $1"\t"$2"\t"substr($3,1,10)"\t"$4}'
 ```bash
 cat data |
 sed -n -e '/<span class="mw-headline" id="現メンバー">現メンバー/,/<span class="mw-headline" id="構成の推移">/p' |
-grep -E -C 3 '<td>.+(都|県|府|州|道)</td>' |
+grep -E -C 3 '<td>.+(都|県|府|州|道|ドルフ)</td>' |
 sed -r -e 's/<[^>]+>//g' -e '/--/d' |
 awk '{if(NR%7)ORS="\t";else ORS="\n"; print}' |
 awk -F '\t' '{print $1"\t"$2"\t"substr($3,1,10)"\t"$4"\t"substr($7,1,1)}'
@@ -48,7 +48,7 @@ awk -F '\t' '{print $1"\t"$2"\t"substr($3,1,10)"\t"$4}'
 
 ```bash
 cat member_info_all.tsv |
-awk -F '\t' 'BEGIN{OFS="\t"; print "名前","読み","ローマ字"}NR>1{t=$2; c="echo "t" | uconv -x latin";c | getline r;close(c);print $1,$2,r}' > member_info_name.tsv 
+awk -F '\t' 'BEGIN{OFS="\t"; print "名前","読み","ローマ字"}NR>1{t=$2; c="echo "t" | uconv -x latin";c | getline r;close(c);print $1,$2,r}' > member_info_name.tsv
 ```
 
 ## koujichuListデータの作成
