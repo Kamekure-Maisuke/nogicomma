@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -e
+
+DATA_DIR="$(dirname $0)/../data/"
+
+usage(){
+  cat <<EOF
+Usage: ${0##*/} [option]
+Available options:
+-h        show help
+EOF
+  exit
+}
+
+case ${1:-default} in
+  (-h)
+    usage
+  ;;
+  (default)
+    kanji_list=$(cut -f1 "$DATA_DIR/member_info_all.tsv" | grep -P -o '\p{Han}' | sort -u)
+    line=$(echo "$kanji_list" | wc -l)
+    line=${line%% *}
+    for i in {1..4}
+    do
+      rn=$(shuf -i 1-"$line" -n 1)
+      result+=$(echo "$kanji_list" | awk -v rn="$rn" 'NR==rn')
+    done
+    echo "$result"
+  ;;
+  (*)
+    echo "${0##*/} : missing option";exit 1
+  ;;
+esac
