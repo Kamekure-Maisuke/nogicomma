@@ -13,6 +13,8 @@
 
 ![image](https://user-images.githubusercontent.com/44114228/128033903-3e768275-1cae-4f85-8ec0-527af7cc8702.png)
 
+![image](https://user-images.githubusercontent.com/44114228/132500739-3803b0a5-d0a6-4b86-bcd0-f8155364891e.png)
+
 ## インストール
 - use docker
 
@@ -34,3 +36,4 @@ $ docker-compose exec nogicomma bash
 |nclist|メンバー情報をTSVで出力|
 |ncdoko|乃木どこ情報をTSVで出力|
 |nckojichu|乃木坂工事中情報をTSVで出力|
+|ncnewmember|乃木坂メンバー名ジェネレータ|
