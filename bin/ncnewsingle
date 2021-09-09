@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -e
+
+DATA_DIR="$(dirname $0)/../data"
+DATA_FILE="$DATA_DIR/single_analysis.tsv"
+
+usage(){
+  cat <<EOF
+Usage: ${0##*/} [option]
+Available options:
+-h        show help
+EOF
+  exit
+}
+
+case ${1:-default} in
+  (-h)
+    usage
+  ;;
+  (default)
+    :
+  ;;
+  (*)
+    echo "${0##*/} : missing option";exit 1
+  ;;
+esac
+
+# 各リスト
+m=$(grep '名詞' $DATA_FILE)
+j=$(grep -E '助詞_(連|格)' $DATA_FILE)
+
+# ランダム数
+fr=$(echo "$m" | wc -l | xargs -I@ shuf -i 1-@ -n 1)
+sr=$(echo "$j" | wc -l | xargs -I@ shuf -i 1-@ -n 1)
+tr=$(echo "$m" | wc -l | xargs -I@ shuf -i 1-@ -n 1)
+
+# 出力
+paste -d '' \
+<(echo "$m" | awk -F '\t' -v fr=$fr 'NR==fr {print $2}') \
+<(echo "$j" | awk -F '\t' -v sr=$sr 'NR==sr {print $2}') \
+<(echo "$m" | awk -F '\t' -v tr=$tr 'NR==tr {print $2}')
