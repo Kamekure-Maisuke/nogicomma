@@ -16,7 +16,7 @@ EOF
 }
 
 # 引数0
-[ $# -eq 0 ] && kanji_list=$(cut -f1 "$DATA_DIR/member_info_all.tsv" | grep -P -o '\p{Han}' | sort -u)
+[ $# -eq 0 ] && kanji_list=$(cut -f1 "$DATA_DIR/member_info_all.tsv" | grep -P -o '\p{Han}' | sort -u | sed '1d')
 
 # opition処理
 while getopts ":e:h" OPT
@@ -24,7 +24,7 @@ do
   case ${OPT} in
     (e)
       OPTARG=${OPTARG:-0}
-      kanji_list=$(cut -f1 "$DATA_DIR/member_info_all.tsv" | grep -P -o '\p{Han}' | grep -v "[${OPTARG}]" | sort -u)
+      kanji_list=$(cut -f1 "$DATA_DIR/member_info_all.tsv" | grep -P -o '\p{Han}' | grep -v "[${OPTARG}]" | sort -u | sed '1d')
     ;;
     (h) usage ;;
     (*) echo "${0##*/} : missing option ${OPTARG}";exit 1 ;;
