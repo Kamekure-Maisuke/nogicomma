@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -e
+
+# コマンドパス
+single_script="./ncnewsingle"
+member_script="./ncnewmember"
+
+usage(){
+  cat <<EOF
+Usage: ${0##*/}
+Available options:
+-h        show help
+EOF
+  exit
+}
+
+case ${1:-default} in
+  (-h) usage ;;
+  (default)
+    printf "\e[35m[%s]\e[0m : %s\n" "タイトル" $(${single_script})
+    echo -e "\e[1m[三列目]\e[0m"
+    for i in {1..7}
+    do
+      echo $(${member_script})
+    done
+    echo -e "\e[1m[二列目]\e[0m"
+    for i in {1..5}
+    do
+      echo $(${member_script})
+    done
+    echo -e "\e[1m[一列目]\e[0m"
+    for i in {1..3}
+    do
+      c=""
+      [ $i -eq 2 ] && c="(センター)"
+      echo $(${member_script})"$c"
+    done
+  ;;
+  (*) echo "${0##*/} : missing option"; exit 1
+esac
