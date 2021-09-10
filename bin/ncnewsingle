@@ -19,7 +19,13 @@ case ${1:-default} in
     usage
   ;;
   (default)
-    :
+    mode="d"
+  ;;
+  (-mm)
+    mode="mm"
+  ;;
+  (-km)
+    mode="km"
   ;;
   (*)
     echo "${0##*/} : missing option";exit 1
@@ -29,14 +35,35 @@ esac
 # 各リスト
 m=$(grep '名詞' $DATA_FILE)
 j=$(grep -E '助詞_(連|格)' $DATA_FILE)
+k=$(grep '形容詞' $DATA_FILE)
 
 # ランダム数
-fr=$(echo "$m" | wc -l | xargs -I@ shuf -i 1-@ -n 1)
-sr=$(echo "$j" | wc -l | xargs -I@ shuf -i 1-@ -n 1)
-tr=$(echo "$m" | wc -l | xargs -I@ shuf -i 1-@ -n 1)
+fmr=$(echo "$m" | wc -l | xargs -I@ shuf -i 1-@ -n 1)
+smr=$(echo "$m" | wc -l | xargs -I@ shuf -i 1-@ -n 1)
+fjr=$(echo "$j" | wc -l | xargs -I@ shuf -i 1-@ -n 1)
+fkr=$(echo "$k" | wc -l | xargs -I@ shuf -i 1-@ -n 1)
+
+# 出力関数
+fm_sto(){
+  echo "$m" | awk -F '\t' -v fmr=$fmr 'NR==fmr {print $2}'
+}
+sm_sto(){
+  echo "$m" | awk -F '\t' -v smr=$smr 'NR==smr {print $2}'
+}
+fj_sto(){
+  echo "$j" | awk -F '\t' -v fjr=$fjr 'NR==fjr {print $2}'
+}
+fk_sto(){
+  echo "$k" | awk -F '\t' -v fkr=$fkr 'NR==fkr {print $2}'
+}
 
 # 出力
-paste -d '' \
-<(echo "$m" | awk -F '\t' -v fr=$fr 'NR==fr {print $2}') \
-<(echo "$j" | awk -F '\t' -v sr=$sr 'NR==sr {print $2}') \
-<(echo "$m" | awk -F '\t' -v tr=$tr 'NR==tr {print $2}')
+[ $mode = "d" ] && {
+  paste -d '' <(fm_sto) <(fj_sto) <(sm_sto)
+}
+[ $mode = "mm" ] && {
+  paste -d '' <(fm_sto) <(sm_sto)
+}
+[ $mode = "km" ] && {
+  paste -d '' <(fk_sto) <(fm_sto)
+}
