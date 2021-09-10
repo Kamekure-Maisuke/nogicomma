@@ -9,26 +9,34 @@ usage(){
 Usage: ${0##*/} [option]
 Available options:
 -h        show help
+-e        pattern exclude。指定文字列(メンバーの除外)
+          example : ./ncnewmember -e "大和"
 EOF
   exit
 }
 
-case ${1:-default} in
-  (-h)
-    usage
-  ;;
-  (default)
-    kanji_list=$(cut -f1 "$DATA_DIR/member_info_all.tsv" | grep -P -o '\p{Han}' | sort -u)
-    line=$(echo "$kanji_list" | wc -l)
-    line=${line%% *}
-    for i in {1..4}
-    do
-      rn=$(shuf -i 1-"$line" -n 1)
-      result+=$(echo "$kanji_list" | awk -v rn="$rn" 'NR==rn')
-    done
-    echo "$result"
-  ;;
-  (*)
-    echo "${0##*/} : missing option";exit 1
-  ;;
-esac
+# 引数0
+[ $# -eq 0 ] && kanji_list=$(cut -f1 "$DATA_DIR/member_info_all.tsv" | grep -P -o '\p{Han}' | sort -u)
+
+# opition処理
+while getopts ":e:h" OPT
+do
+  case ${OPT} in
+    (e)
+      OPTARG=${OPTARG:-0}
+      kanji_list=$(cut -f1 "$DATA_DIR/member_info_all.tsv" | grep -P -o '\p{Han}' | grep -v "[${OPTARG}]" | sort -u)
+    ;;
+    (h) usage ;;
+    (*) echo "${0##*/} : missing option ${OPTARG}";exit 1 ;;
+  esac
+done
+
+# メイン処理
+line=$(echo "$kanji_list" | wc -l)
+line=${line%% *}
+for i in {1..4}
+do
+  rn=$(shuf -i 1-"$line" -n 1)
+  result+=$(echo "$kanji_list" | awk -v rn="$rn" 'NR==rn')
+done
+echo "$result"
