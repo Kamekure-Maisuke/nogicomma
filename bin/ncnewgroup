@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+DATA_DIR="$(dirname $0)/../data"
+DATA_FILE="$DATA_DIR/slope_list"
+
+usage(){
+  cat <<EOS
+Usage: ${0##*/} [option]
+Available options:
+-h        show help
+EOS
+  exit
+}
+
+case ${1:-default} in
+  (-h) usage ;;
+  (default)
+    r=$(grep -Evc '乃木|日向' $DATA_FILE | xargs -I@ shuf -i 1-@ -n 1)
+    sed -n "$r"p $DATA_FILE
+  ;;
+esac
