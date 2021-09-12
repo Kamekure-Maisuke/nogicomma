@@ -20,4 +20,5 @@ case ${1:-default} in
     r=$(grep -Evc '乃木|日向' $DATA_FILE | xargs -I@ shuf -i 1-@ -n 1)
     sed -n "$r"p $DATA_FILE
   ;;
+  (*) echo "${0##*/} : missing option"; exit 1
 esac
