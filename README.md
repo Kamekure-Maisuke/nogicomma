@@ -40,3 +40,5 @@ $ docker-compose exec nogicomma bash
 |nckojichu|乃木坂工事中情報をTSVで出力|
 |ncnewmember|乃木坂メンバー名ジェネレータ|
 |ncnewsingle|楽曲名ジェネレータ|
+|ncnewgroup|グループ名ジェネレータ|
+|ncfsingle|選抜曲&メンバージェネレータ|
