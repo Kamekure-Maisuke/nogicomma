@@ -78,3 +78,12 @@ done
 ```bash
 curl -s '乃木坂wikiURL' | sed -n '/<span class="mw-headline" id="シングル">/,/<span class="mw-headline" id="アルバム">/p' | grep -E -B 2 -A 10 '<b>.+</b>' | sed -r -e 's/<[^>]+>//g' -e '/-/d' -e '/^$/d' | awk '{if(NR%5)ORS="\t"; else ORS="\n"; print}' | awk -F '\t' 'BEGIN{OFS="\t"}{sub("amp;","",$2);sub(/&#.+/,"",$4);sub(/&#.+/,"",$5);print $1,$2,$4,$5}' > single.tsv
 ```
+
+## 坂データの取得
+
+```bash
+curl -s 'https://ja.wikipedia.org/wiki/Category:%E6%9D%B1%E4%BA%AC%E9%83%BD%E3%81%AE%E5%9D%82' |
+sed -n "/<h3>あ<\/h3>/,/<h3>東<\/h3>/p" |
+grep -E '.+坂.+</a>.*?</li>' |
+sed -r -e 's/<[^>]+>//g' -e 's/(.+坂).+/\1/'
+```
