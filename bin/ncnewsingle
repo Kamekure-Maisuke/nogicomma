@@ -10,6 +10,8 @@ usage(){
 Usage: ${0##*/} [option]
 Available options:
 -h        show help
+-mm       format 名詞+名詞
+-km       format 形容詞+名詞
 EOF
   exit
 }
