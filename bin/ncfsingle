@@ -18,7 +18,7 @@ EOF
 case ${1:-default} in
   (-h) usage ;;
   (default)
-    printf "\e[35m[%s]\e[0m : %s\n" "タイトル" $(${single_script})
+    printf "\e[1m[%s]\e[0m : %s\n" "タイトル" $(${single_script})
     echo -e "\e[1m[三列目]\e[0m"
     for i in {1..7}
     do
