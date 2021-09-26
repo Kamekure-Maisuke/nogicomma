@@ -51,6 +51,14 @@ cat member_info_all.tsv |
 awk -F '\t' 'BEGIN{OFS="\t"; print "名前","読み","ローマ字"}NR>1{t=$2; c="echo "t" | uconv -x latin";c | getline r;close(c);print $1,$2,r}' > member_info_name.tsv
 ```
 
+## member_search.tsvデータの取得
+- member_info_allデータを加工して取得
+- ロングかショートかは、現時点で手動
+
+```bash
+awk -v now="$(date -u '+%Y%m%d')" -F '\t' 'BEGIN{OFS="\t"}{gsub("/","",$3);age=now-$3;age=substr(age,1,2); print $1,$4,age}' member_info_all.tsv > member_search.tsv
+```
+
 ## koujichuListデータの作成
 
 ```bash
