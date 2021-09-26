@@ -11,7 +11,8 @@ RUN apt update -yqq && \
     ca-certificates locales sudo \
     git build-essential file \
     curl vim toilet icu-devtools \
-    mecab libmecab-dev mecab-ipadic-utf8 && \
+    mecab libmecab-dev mecab-ipadic-utf8 \
+    pulseaudio && \
     locale-gen ja_JP.UTF-8 && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*

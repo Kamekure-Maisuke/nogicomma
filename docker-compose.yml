@@ -6,7 +6,12 @@ services:
       context: .
     image: nogicomma
     restart: always
+    environment:
+      - PULSE_SERVER=docker.for.mac.localhost
     tty: true
     # ローカルプロジェクトと同期
     volumes:
       - .:/usr/local/src/nogicomma
+      - type: bind
+        source: ~/.config/pulse
+        target: /root/.config/pulse
