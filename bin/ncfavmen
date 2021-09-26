@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -e
+
+DATA_DIR="$(dirname $0)/../data"
+
+error_and_usage(){
+  cat <<EOF
+usage : ${0##*/}
+
+対話式で質問に答えていくと任意の推しメン候補を出力。
+
+※引数の指定は不要です。
+EOF
+exit 1
+}
+
+[ "$#" -eq 0 ] || error_and_usage
+
+read -p '年齢を右記から数字で入力してください。 (1:19歳以下,2:20~24歳,3:25歳以上) : ' first
+case "$first" in
+  (1) age_reg='1[0-9]' ;;
+  (2) age_reg='2[0-4]' ;;
+  (3) age_reg='(2[5-9]|3[0-9])' ;;
+  (*) echo "年齢の入力値が不正です。"; exit 1
+esac
+read -p '出身地を入力してください。(例: 東京都) : ' second
+case "$second" in
+  (*[県都州ド府]) : ;;
+  (*) echo "出身地の入力値が不正です。"; exit 1
+esac
+read -p '髪型を右記から数字で入力してください。(1:ロング,2:ショート) : ' third
+case "$third" in
+  (1) hair="ロング" ;;
+  (2) hair="ショート" ;;
+  (*) echo "髪型の入力値が不正です。"; exit 1
+esac
+
+grep -E "$age_reg" "$DATA_DIR/member_search.tsv" |
+awk -v from="$second" -v hair="$hair" -F '\t' '
+BEGIN{print "貴方の好みに適合するメンバーは・・・・・・・・"}
+$2 == from && $4 == hair {print $1}
+END{print "です！！素晴らしいオタ活を！！"}
+'
