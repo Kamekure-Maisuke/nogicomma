@@ -6,15 +6,14 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ENV LANG ja_JP.UTF-8
 
-RUN apt update -yqq && \
-    apt install -y --no-install-recommends \
+RUN apt-get update -yqq && \
+    apt-get install -y --no-install-recommends \
     ca-certificates locales sudo \
     git build-essential file \
     curl vim toilet icu-devtools \
-    mecab libmecab-dev mecab-ipadic-utf8 \
-    pulseaudio && \
+    mecab libmecab-dev mecab-ipadic-utf8 && \
     locale-gen ja_JP.UTF-8 && \
-    apt clean && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp
