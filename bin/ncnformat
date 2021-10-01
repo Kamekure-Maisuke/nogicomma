@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+
+usage(){
+  cat <<EOF
+Usage: ${0##*/} [option]
+入力英字テキストをサイン調に変換します。
+※入力は英字のみです。
+Available options:
+-h        show help
+[text]    english text
+EOF
+  exit 1
+}
+
+# 引数解析
+first="${1:-NOGIZAKA}"
+[ "$1" = "-h" ] && usage
+( echo "$first" | grep -q -E '^[a-zA-Z]+$' ) || usage
+
+# メイン処理
+unum "${first^^}" |
+awk 'NR>1{ORS=" ";print 1200 $2-49}' |
+xargs unum |
+awk 'NR>1{ORS=" ";gsub("\"","",$5);print $5}END{print "\n"}'
