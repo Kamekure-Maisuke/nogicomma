@@ -17,6 +17,10 @@ RUN apt-get update -yqq && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp
+
+RUN curl -OL "https://www.fourmilab.ch/webtools/unum/download/unum_comp.tar.gz" && \
+    tar -xzf unum_comp.tar.gz && mv unum.pl /usr/local/bin/unum && rm -rf ./unum_comp.tar.gz
+
 RUN git clone --depth 1 https://github.com/neologd/mecab-ipadic-neologd.git && \
     ./mecab-ipadic-neologd/bin/install-mecab-ipadic-neologd -n -y && \
     sudo mv /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd /var/lib/mecab/dic/ && \
