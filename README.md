@@ -42,3 +42,6 @@ $ docker-compose exec nogicomma bash
 |ncnewsingle|楽曲名ジェネレータ|
 |ncnewgroup|グループ名ジェネレータ|
 |ncfsingle|選抜曲&メンバージェネレータ|
+|ncfavman|推しメン検索|
+|ncnformat|指定テキストのサインジェネレータ|
+|nccat|指定ファイルを坂記号で全置換|
