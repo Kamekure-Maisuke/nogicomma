@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+export LC_ALL=C
+export PURPLE=$'\e[35m'
+export NORMAL=$'\e[0m'
+
+usage(){
+  cat <<EOF
+Usage: ${0##*/} [option]
+Script description here.
+Available options:
+-h          show help
+EOF
+exit 1
+}
+
+case "${1:-default}" in
+  (-h) usage ;;
+  (-*)
+    echo 'no option'
+    exit 1
+  ;;
+  (default)
+    c="cat -"
+  ;;
+  (*)
+    [ -f "$1" ] || {
+      echo "no file"
+      exit 1
+    }
+    c="cat $1"
+  ;;
+esac
+
+eval "$c" | awk '{gsub(/./,ENVIRON["PURPLE"] "◢" ENVIRON["NORMAL"],$1);print}'
